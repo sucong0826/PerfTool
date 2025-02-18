@@ -1,41 +1,35 @@
-# import tkinter as tk
-# from tkinter import messagebox
-
-# def on_button_click():
-#     messagebox.showinfo("hello!", "button clicked!")
-
-# app = tk.Tk()
-# app.title("cross-platform tkinter app")
-# app.geometry("400x300")
-
-# label = tk.Label(app, text="welcome to tkinter gui", font=("Arial", 16))
-# label.pack(pady=20)
-
-# button = tk.Button(app, text="click me", command=on_button_click)
-# button.pack(pady=10)
-
-# app.mainloop()
-
 import customtkinter as ctk
+from ui.welcome_page import WelcomePage as welcome_page
+from ui.perftool_page import PerfToolPage as perftool_page
 
 # 设置 CustomTkinter 的外观模式和主题
-ctk.set_appearance_mode("dark")  # 模式：light, dark, system
-ctk.set_default_color_theme("blue")  # 主题：blue, green, dark-blue
+ctk.set_appearance_mode("light")
+ctk.set_default_color_theme("blue")
 
-# 创建主窗口
-app = ctk.CTk()
-app.title("CustomTkinter App")
-app.geometry("400x300")
+# 主窗口类
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("PerfTool Application")
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        self.geometry(f"{screen_width}x{screen_height}")
 
-# 添加控件
-label = ctk.CTkLabel(app, text="Welcome to CustomTkinter!", font=("Arial", 16))
-label.pack(pady=20)
+        # 定义两个页面
+        self.welcome_page = welcome_page(self)
+        self.perftool_page = perftool_page(self)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
-button = ctk.CTkButton(app, text="Click Me", command=lambda: print("Button clicked"))
-button.pack(pady=10)
+        # 显示 Welcome 页面
+        self.show_page(self.welcome_page)
 
-entry = ctk.CTkEntry(app, placeholder_text="Enter something...")
-entry.pack(pady=10)
+    def show_page(self, page):
+        """切换页面"""
+        page.tkraise()
 
 # 启动应用
-app.mainloop()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
